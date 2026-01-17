@@ -85,7 +85,7 @@ export default function AdminBrandsPage() {
       <div className="max-w-4xl mx-auto">
         <div className="flex items-center justify-between mb-4">
           <h1 className="font-display text-3xl font-bold text-white">
-            Gestion des <span className="text-green-400">Marques</span>
+            Gestion des <span className="text-primary-400">Marques</span>
           </h1>
           {canEdit && (
             <button onClick={() => { setShowForm(true); setEditingBrand(null); setForm({ name: '', logo: '' }); }} className="btn-primary">
@@ -101,7 +101,7 @@ export default function AdminBrandsPage() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="🔍 Rechercher une marque..."
-            className="w-full bg-dark-100 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-green-500 focus:outline-none"
+            className="w-full bg-dark-100 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-primary-500 focus:outline-none"
           />
           <p className="text-gray-500 text-sm mt-2">{filteredBrands.length} marque(s) trouvée(s)</p>
         </div>
@@ -154,7 +154,7 @@ export default function AdminBrandsPage() {
                   {brand.logo ? (
                     <img src={brand.logo} alt={brand.name} className="w-10 h-10 object-contain" />
                   ) : (
-                    <span className="font-display text-xl font-bold text-green-400">{brand.name.charAt(0)}</span>
+                    <span className="font-display text-xl font-bold text-primary-400">{brand.name.charAt(0)}</span>
                   )}
                 </div>
                 <div>

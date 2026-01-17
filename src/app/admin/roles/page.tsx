@@ -274,7 +274,7 @@ export default function AdminRolesPage() {
               </div>
 
               <div className="flex flex-wrap gap-2">
-                {role.canAccessAdmin && <span className="text-xs bg-green-500/20 text-green-400 px-2 py-1 rounded">Panel Admin</span>}
+                {role.canAccessAdmin && <span className="text-xs bg-primary-500/20 text-primary-400 px-2 py-1 rounded">Panel Admin</span>}
                 {role.canEditBrands && <span className="text-xs bg-blue-500/20 text-blue-400 px-2 py-1 rounded">Modif Marques</span>}
                 {role.canDeleteBrands && <span className="text-xs bg-red-500/20 text-red-400 px-2 py-1 rounded">Suppr Marques</span>}
                 {role.canEditVehicles && <span className="text-xs bg-blue-500/20 text-blue-400 px-2 py-1 rounded">Modif Véhicules</span>}

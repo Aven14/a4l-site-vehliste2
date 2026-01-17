@@ -179,7 +179,7 @@ export default function AdminVehiclesPage() {
       <div className="max-w-5xl mx-auto">
         <div className="flex items-center justify-between mb-4">
           <h1 className="font-display text-3xl font-bold text-white">
-            Gestion des <span className="text-green-400">Véhicules</span>
+            Gestion des <span className="text-primary-400">Véhicules</span>
           </h1>
           {canEdit && (
             <button onClick={resetForm} className="btn-primary">
@@ -359,7 +359,7 @@ export default function AdminVehiclesPage() {
                     ▶
                   </span>
                   <div className="w-10 h-10 bg-dark-300 rounded-lg flex items-center justify-center">
-                    <span className="font-display text-lg font-bold text-green-400">{brand.name.charAt(0)}</span>
+                    <span className="font-display text-lg font-bold text-primary-400">{brand.name.charAt(0)}</span>
                   </div>
                   <span className="font-semibold text-white">{brand.name}</span>
                   <span className="text-gray-500 text-sm">({brandVehicles.length} véhicules)</span>

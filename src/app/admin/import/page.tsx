@@ -86,13 +86,13 @@ export default function ImportPage() {
             value={json}
             onChange={(e) => setJson(e.target.value)}
             className="w-full bg-dark-300 border border-gray-700 rounded-lg px-4 py-3 text-white 
-                       focus:border-green-500 focus:outline-none font-mono text-sm"
+                       focus:border-primary-500 focus:outline-none font-mono text-sm"
             rows={15}
             placeholder="[{ ... }]"
           />
 
           {result && (
-            <div className={`mt-4 p-4 rounded-lg ${result.error ? 'bg-red-500/10 text-red-400' : 'bg-green-500/10 text-green-400'}`}>
+            <div className={`mt-4 p-4 rounded-lg ${result.error ? 'bg-red-500/10 text-red-400' : 'bg-primary-500/10 text-primary-400'}`}>
               {result.error || result.message}
             </div>
           )}
