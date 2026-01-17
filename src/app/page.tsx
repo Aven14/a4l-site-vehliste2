@@ -56,7 +56,7 @@ export default async function HomePage() {
       <section 
         className="py-12"
         style={{
-          borderColor: `rgba(var(--accent-color-rgb, 168, 85, 247), 0.1)`,
+          borderColor: `rgba(var(--accent-color-rgb, 168, 85, 247), 0.05)`,
           borderTopWidth: '1px',
           borderBottomWidth: '1px'
         }}
