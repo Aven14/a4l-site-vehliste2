@@ -63,6 +63,10 @@ function AccountContent() {
       setMessage('Mot de passe modifié avec succès ! Un e-mail de confirmation a été envoyé.')
       setForm(f => ({ ...f, currentPassword: '', newPassword: '', confirmPassword: '' }))
       update()
+      // Nettoyer l'URL après 3 secondes pour éviter les recharges
+      setTimeout(() => {
+        window.history.replaceState({}, '', '/account')
+      }, 3000)
     }
 
     const emailChanged = searchParams.get('email-changed')
@@ -73,6 +77,10 @@ function AccountContent() {
       if (session?.user?.email) {
         setForm(f => ({ ...f, email: session.user.email || '' }))
       }
+      // Nettoyer l'URL après 3 secondes
+      setTimeout(() => {
+        window.history.replaceState({}, '', '/account')
+      }, 3000)
     }
   }, [searchParams, update, session])
 
