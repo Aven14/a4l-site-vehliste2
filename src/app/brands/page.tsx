@@ -49,7 +49,7 @@ export default function BrandsPage() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="🔍 Rechercher une marque..."
-            className="w-full max-w-md bg-dark-100 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-green-500 focus:outline-none"
+            className="w-full max-w-md bg-dark-100 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-primary-500 focus:outline-none"
           />
           <p className="text-gray-500 text-sm mt-2">{filteredBrands.length} marque(s)</p>
         </div>
@@ -61,7 +61,7 @@ export default function BrandsPage() {
                 {brand.logo ? (
                   <img src={brand.logo} alt={brand.name} className="w-12 h-12 object-contain" />
                 ) : (
-                  <span className="font-display text-3xl font-bold text-green-400">{brand.name.charAt(0)}</span>
+                  <span className="font-display text-3xl font-bold text-primary-400">{brand.name.charAt(0)}</span>
                 )}
               </div>
               <h2 className="font-display text-xl font-bold text-white mb-2">{brand.name}</h2>

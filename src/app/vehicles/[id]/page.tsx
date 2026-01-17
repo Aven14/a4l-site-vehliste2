@@ -50,12 +50,12 @@ export default async function VehiclePage({ params }: { params: { id: string } }
             <div className="flex items-center gap-3 mb-4">
               <Link
                 href={`/brands/${vehicle.brand.id}`}
-                className="bg-dark-100 px-4 py-2 rounded-lg text-gray-300 hover:text-green-400 transition"
+                className="bg-dark-100 px-4 py-2 rounded-lg text-gray-300 hover:text-primary-400 transition"
               >
                 {vehicle.brand.name}
               </Link>
               {vehicle.category && (
-                <span className="bg-green-500/20 text-green-400 px-4 py-2 rounded-lg">
+                <span className="bg-primary-500/20 text-primary-400 px-4 py-2 rounded-lg">
                   {vehicle.category}
                 </span>
               )}
@@ -96,7 +96,7 @@ export default async function VehiclePage({ params }: { params: { id: string } }
             {/* Prix */}
             <div className="bg-dark-100 rounded-xl p-6 mb-6">
               <div className="text-gray-500 mb-2">Prix d&apos;achat</div>
-              <div className="font-display text-5xl font-bold text-green-400">
+              <div className="font-display text-5xl font-bold text-primary-400">
                 {vehicle.price.toLocaleString()} €
               </div>
             </div>
@@ -125,8 +125,8 @@ export default async function VehiclePage({ params }: { params: { id: string } }
             </div>
 
             {/* Info achat en jeu */}
-            <div className="mt-6 bg-green-500/10 border border-green-500/30 rounded-xl p-4 text-center">
-              <p className="text-green-400 font-semibold">🎮 Achat disponible uniquement en jeu</p>
+            <div className="mt-6 bg-primary-500/10 border border-primary-500/30 rounded-xl p-4 text-center">
+              <p className="text-primary-400 font-semibold">🎮 Achat disponible uniquement en jeu</p>
               <p className="text-white text-lg mt-2">{dealership.name}</p>
               <p className="text-gray-400">📍 {dealership.location}</p>
             </div>
@@ -134,7 +134,7 @@ export default async function VehiclePage({ params }: { params: { id: string } }
         </div>
 
         <div className="mt-12">
-          <Link href="/vehicles" className="text-green-400 hover:text-green-300 transition">
+          <Link href="/vehicles" className="text-primary-400 hover:text-primary-300 transition">
             ← Retour aux véhicules
           </Link>
         </div>

@@ -23,7 +23,7 @@ export default async function BrandPage({ params }: { params: { id: string } }) 
             {brand.logo ? (
               <img src={brand.logo} alt={brand.name} className="w-16 h-16 object-contain" />
             ) : (
-              <span className="font-display text-4xl font-bold text-green-400">
+              <span className="font-display text-4xl font-bold text-primary-400">
                 {brand.name.charAt(0)}
               </span>
             )}
@@ -56,7 +56,7 @@ export default async function BrandPage({ params }: { params: { id: string } }) 
                   <h3 className="font-display text-xl font-bold text-white mb-2">{vehicle.name}</h3>
                   <p className="text-gray-400 text-sm mb-4 line-clamp-2">{vehicle.description}</p>
                   <div className="flex items-center justify-between">
-                    <span className="font-display text-2xl font-bold text-green-400">
+                    <span className="font-display text-2xl font-bold text-primary-400">
                       {vehicle.price.toLocaleString()} €
                     </span>
                     <span className="btn-secondary text-sm py-2 px-4">
@@ -76,7 +76,7 @@ export default async function BrandPage({ params }: { params: { id: string } }) 
         )}
 
         <div className="mt-12">
-          <Link href="/brands" className="text-green-400 hover:text-green-300 transition">
+          <Link href="/brands" className="text-primary-400 hover:text-primary-300 transition">
             ← Retour aux marques
           </Link>
         </div>

@@ -44,7 +44,7 @@ export default function VehiclesPage() {
     <div className="min-h-screen py-12 px-4">
       <div className="max-w-7xl mx-auto">
         <h1 className="font-display text-4xl font-bold text-white mb-2">
-          Tous les <span className="text-green-400">Véhicules</span>
+          Tous les <span className="text-primary-400">Véhicules</span>
         </h1>
         <p className="text-gray-500 mb-6">Liste non-officielle des véhicules disponibles</p>
 
@@ -55,7 +55,7 @@ export default function VehiclesPage() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="🔍 Rechercher un véhicule ou une marque..."
-            className="w-full max-w-md bg-dark-100 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-green-500 focus:outline-none"
+            className="w-full max-w-md bg-dark-100 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-primary-500 focus:outline-none"
           />
           <p className="text-gray-500 text-sm mt-2">{filteredVehicles.length} véhicule(s)</p>
         </div>
@@ -75,10 +75,10 @@ export default function VehiclesPage() {
                   )}
                 </div>
                 <div className="p-4">
-                  <p className="text-green-400 text-sm mb-1">{vehicle.brand.name}</p>
+                  <p className="text-primary-400 text-sm mb-1">{vehicle.brand.name}</p>
                   <h2 className="font-display text-lg font-bold text-white mb-2">{vehicle.name}</h2>
                   <div className="flex items-center justify-between">
-                    <span className="text-xl font-bold text-green-400">{vehicle.price.toLocaleString()} €</span>
+                    <span className="text-xl font-bold text-primary-400">{vehicle.price.toLocaleString()} €</span>
                     {vehicle.power && <span className="text-gray-500 text-sm">{vehicle.power} CV</span>}
                   </div>
                 </div>
