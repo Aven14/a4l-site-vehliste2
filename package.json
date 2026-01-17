@@ -27,7 +27,6 @@
     "seed": "node prisma/seed.js"
   },
   "devDependencies": {
-    "@netlify/plugin-nextjs": "^4.41.5",
     "@types/bcryptjs": "2.4.6",
     "@types/node": "20.11.0",
     "@types/nodemailer": "^6.4.14",

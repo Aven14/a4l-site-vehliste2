@@ -11,9 +11,9 @@ Sur Vercel, tu dois configurer les variables d'environnement :
 3. Ajoute ces variables :
 
 ```
-DATABASE_URL=file:./dev.db
+DATABASE_URL=votre-url-postgresql
 NEXTAUTH_SECRET=ton-secret-super-long-et-aleatoire-ici
-NEXTAUTH_URL=https://ton-site.vercel.app
+NEXTAUTH_URL=https://a4l-listeveh.vercel.app
 ```
 
 **Important** : Pour `NEXTAUTH_SECRET`, génère une clé aléatoire avec :
