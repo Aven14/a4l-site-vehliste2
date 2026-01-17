@@ -114,6 +114,8 @@ function AccountContent() {
           // Username ou couleur changé
           setMessage(data.message || 'Profil mis à jour avec succès !')
           await update()
+          // Recharger la page pour voir les changements
+          router.refresh()
         }
       } else {
         setError(data.error || 'Erreur lors de la mise à jour')
