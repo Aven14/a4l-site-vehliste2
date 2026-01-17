@@ -114,8 +114,10 @@ function AccountContent() {
           // Username ou couleur changé
           setMessage(data.message || 'Profil mis à jour avec succès !')
           await update()
-          // Recharger la page pour voir les changements
-          router.refresh()
+          // Recharger la page complètement pour appliquer le thème
+          setTimeout(() => {
+            window.location.reload()
+          }, 500)
         }
       } else {
         setError(data.error || 'Erreur lors de la mise à jour')
