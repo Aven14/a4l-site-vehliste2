@@ -113,7 +113,13 @@ export default async function HomePage() {
       </section>
 
       {/* Footer */}
-      <footer className="py-8 border-t border-primary-500/10 text-center text-gray-500">
+      <footer 
+        className="py-8 text-center text-gray-500"
+        style={{
+          borderColor: `rgba(var(--accent-color-rgb, 168, 85, 247), 0.05)`,
+          borderTopWidth: '1px'
+        }}
+      >
         <p>© 2026 Catalogue Véhicule A4L - Site non-officiel créé par des joueurs</p>
         <p className="text-sm text-gray-600 mt-1">Ce site n'est pas affilié au serveur officiel Arma For Life</p>
       </footer>
