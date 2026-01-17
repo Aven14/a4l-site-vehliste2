@@ -48,6 +48,8 @@ model User {
   emailChangeToken  String?
   emailChangeExpires DateTime?
   emailChangePending String? // Nouvel e-mail en attente
+  // Couleur du thème personnalisée
+  themeColor        String?  // Code couleur hex (ex: #a855f7 pour violet)
   createdAt         DateTime  @default(now())
   updatedAt         DateTime  @updatedAt
 }

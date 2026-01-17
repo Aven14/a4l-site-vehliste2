@@ -9,7 +9,7 @@ export function Navbar() {
   const user = session?.user as any
 
   return (
-    <nav className="bg-dark-200/80 backdrop-blur-md border-b border-green-500/20 sticky top-0 z-50">
+    <nav className="bg-dark-200/80 backdrop-blur-md border-b border-primary-500/20 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
@@ -22,20 +22,20 @@ export function Navbar() {
 
           {/* Navigation */}
           <div className="flex items-center gap-4 sm:gap-6">
-            <Link href="/" className="text-gray-300 hover:text-green-400 transition font-medium">
+            <Link href="/" className="text-gray-300 hover:text-primary-400 transition font-medium">
               Accueil
             </Link>
-            <Link href="/brands" className="text-gray-300 hover:text-green-400 transition font-medium hidden sm:block">
+            <Link href="/brands" className="text-gray-300 hover:text-primary-400 transition font-medium hidden sm:block">
               Marques
             </Link>
-            <Link href="/vehicles" className="text-gray-300 hover:text-green-400 transition font-medium">
+            <Link href="/vehicles" className="text-gray-300 hover:text-primary-400 transition font-medium">
               Véhicules
             </Link>
 
             {session ? (
               <div className="flex items-center gap-3">
                 {user?.canAccessAdmin && (
-                  <Link href="/admin" className="text-green-400 hover:text-green-300 transition font-medium">
+                  <Link href="/admin" className="text-primary-400 hover:text-primary-300 transition font-medium">
                     Panel
                   </Link>
                 )}

@@ -14,6 +14,7 @@ function AccountContent() {
   const [form, setForm] = useState({
     username: '',
     email: '',
+    themeColor: '#a855f7', // Violet par défaut
     currentPassword: '',
     newPassword: '',
     confirmPassword: '',
@@ -25,10 +26,12 @@ function AccountContent() {
 
   useEffect(() => {
     if (session?.user) {
+      const user = session.user as any
       setForm(f => ({
         ...f,
         username: session.user?.name || '',
         email: session.user?.email || '',
+        themeColor: user.themeColor || '#a855f7',
       }))
     }
   }, [session])
@@ -95,6 +98,7 @@ function AccountContent() {
       body: JSON.stringify({
         username: form.username,
         email: form.email,
+        themeColor: form.themeColor,
       }),
     })
 
@@ -182,7 +186,7 @@ function AccountContent() {
         <p className="text-gray-500 mb-8">Rôle : {user?.roleName || 'user'}</p>
 
         {message && (
-          <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-4 text-green-400 mb-6">
+          <div className="bg-primary-500/10 border border-primary-500/30 rounded-lg p-4 text-primary-400 mb-6">
             {message}
           </div>
         )}
@@ -213,6 +217,27 @@ function AccountContent() {
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
                 className="w-full bg-dark-300 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-blue-500 focus:outline-none"
               />
+            </div>
+            <div>
+              <label className="block text-gray-400 text-sm mb-2">Couleur du thème</label>
+              <div className="flex items-center gap-4">
+                <input
+                  type="color"
+                  value={form.themeColor}
+                  onChange={(e) => setForm({ ...form, themeColor: e.target.value })}
+                  className="w-16 h-16 rounded-lg cursor-pointer border-2 border-gray-700"
+                />
+                <div className="flex-1">
+                  <input
+                    type="text"
+                    value={form.themeColor}
+                    onChange={(e) => setForm({ ...form, themeColor: e.target.value })}
+                    placeholder="#a855f7"
+                    className="w-full bg-dark-300 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-blue-500 focus:outline-none font-mono"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">Choisissez une couleur pour personnaliser le thème du site</p>
+                </div>
+              </div>
             </div>
             <button type="submit" disabled={loading} className="btn-primary w-full disabled:opacity-50">
               {loading ? 'Mise à jour...' : 'Mettre à jour le profil'}

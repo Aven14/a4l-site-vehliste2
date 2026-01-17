@@ -27,10 +27,10 @@ export default async function HomePage() {
     <div className="min-h-screen">
       {/* Hero Section */}
       <section className="relative py-24 px-4 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-green-500/5 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-b from-primary-500/5 to-transparent" />
         <div className="max-w-7xl mx-auto text-center relative z-10">
           <h1 className="font-display text-5xl md:text-7xl font-bold text-white mb-6 tracking-wider">
-            VÉHICULES <span className="text-green-400">A4L</span>
+            VÉHICULES <span className="text-primary-400">A4L</span>
           </h1>
           <p className="text-xl text-gray-400 max-w-2xl mx-auto mb-8">
             Liste non-officielle des véhicules du serveur Arma For Life.
@@ -48,21 +48,21 @@ export default async function HomePage() {
       </section>
 
       {/* Stats */}
-      <section className="py-12 border-y border-green-500/10">
+      <section className="py-12 border-y border-primary-500/10">
         <div className="max-w-7xl mx-auto px-4">
           <div className="grid grid-cols-3 gap-8 text-center">
             <div>
-              <div className="font-display text-4xl font-bold text-green-400">{brands.length}</div>
+              <div className="font-display text-4xl font-bold text-primary-400">{brands.length}</div>
               <div className="text-gray-500 mt-1">Marques</div>
             </div>
             <div>
-              <div className="font-display text-4xl font-bold text-green-400">
+              <div className="font-display text-4xl font-bold text-primary-400">
                 {totalVehicles}
               </div>
               <div className="text-gray-500 mt-1">Véhicules</div>
             </div>
             <div>
-              <div className="font-display text-4xl font-bold text-green-400">24/7</div>
+              <div className="font-display text-4xl font-bold text-primary-400">24/7</div>
               <div className="text-gray-500 mt-1">Disponible</div>
             </div>
           </div>
@@ -73,7 +73,7 @@ export default async function HomePage() {
       <section className="py-20 px-4">
         <div className="max-w-7xl mx-auto">
           <h2 className="font-display text-3xl font-bold text-white mb-12 text-center">
-            NOS <span className="text-green-400">MARQUES</span>
+            NOS <span className="text-primary-400">MARQUES</span>
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
             {brands.map((brand: BrandWithCount, i: number) => (
@@ -87,7 +87,7 @@ export default async function HomePage() {
                   {brand.logo ? (
                     <img src={brand.logo} alt={brand.name} className="w-12 h-12 object-contain" />
                   ) : (
-                    <span className="font-display text-2xl font-bold text-green-400">
+                    <span className="font-display text-2xl font-bold text-primary-400">
                       {brand.name.charAt(0)}
                     </span>
                   )}
@@ -101,7 +101,7 @@ export default async function HomePage() {
       </section>
 
       {/* Footer */}
-      <footer className="py-8 border-t border-green-500/10 text-center text-gray-500">
+      <footer className="py-8 border-t border-primary-500/10 text-center text-gray-500">
         <p>© 2026 Catalogue Véhicule A4L - Site non-officiel créé par des joueurs</p>
         <p className="text-sm text-gray-600 mt-1">Ce site n'est pas affilié au serveur officiel Arma For Life</p>
       </footer>

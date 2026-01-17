@@ -13,7 +13,7 @@ export async function PUT(req: NextRequest) {
     return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
   }
 
-  const { username, email } = await req.json()
+  const { username, email, themeColor } = await req.json()
 
   // Trouver l'utilisateur actuel
   const currentUser = await prisma.user.findFirst({
@@ -65,6 +65,7 @@ export async function PUT(req: NextRequest) {
       where: { id: currentUser.id },
       data: {
         username: username !== currentUser.username ? username : currentUser.username, // Mettre à jour le username si changé
+        themeColor: themeColor || currentUser.themeColor, // Mettre à jour la couleur si fournie
         emailChangeToken: token,
         emailChangeExpires: expires,
         emailChangePending: email, // Nouvel e-mail en attente
@@ -105,11 +106,19 @@ export async function PUT(req: NextRequest) {
     })
   }
 
-  // Si seul le username change (pas d'e-mail), mettre à jour directement
+  // Si seul le username ou la couleur change (pas d'e-mail), mettre à jour directement
+  const updateData: any = {}
   if (username !== currentUser.username) {
+    updateData.username = username
+  }
+  if (themeColor && themeColor !== currentUser.themeColor) {
+    updateData.themeColor = themeColor
+  }
+  
+  if (Object.keys(updateData).length > 0) {
     await prisma.user.update({
       where: { id: currentUser.id },
-      data: { username },
+      data: updateData,
     })
   }
 

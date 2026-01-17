@@ -35,6 +35,7 @@ export const authOptions: NextAuthOptions = {
           id: user.id,
           name: user.username,
           email: user.email,
+          themeColor: user.themeColor || undefined,
           roleName: user.role?.name || 'user',
           canAccessAdmin: user.role?.canAccessAdmin || false,
           canEditBrands: user.role?.canEditBrands || false,
@@ -59,6 +60,7 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.roleName = user.roleName
+        token.themeColor = user.themeColor
         token.canAccessAdmin = user.canAccessAdmin
         token.canEditBrands = user.canEditBrands
         token.canEditVehicles = user.canEditVehicles
@@ -73,6 +75,7 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }) {
       if (session.user) {
         session.user.roleName = token.roleName as string
+        session.user.themeColor = token.themeColor as string | undefined
         session.user.canAccessAdmin = token.canAccessAdmin as boolean
         session.user.canEditBrands = token.canEditBrands as boolean
         session.user.canEditVehicles = token.canEditVehicles as boolean
@@ -89,6 +92,7 @@ export const authOptions: NextAuthOptions = {
 
 declare module 'next-auth' {
   interface User {
+    themeColor?: string
     roleName?: string
     canAccessAdmin?: boolean
     canEditBrands?: boolean
@@ -101,6 +105,7 @@ declare module 'next-auth' {
   }
   interface Session {
     user: User & {
+      themeColor?: string
       roleName?: string
       canAccessAdmin?: boolean
       canEditBrands?: boolean

@@ -23,7 +23,7 @@ export function SiteLogo() {
   if (loading) {
     // Logo par défaut pendant le chargement
     return (
-      <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-green-700 rounded-lg flex items-center justify-center">
+      <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-700 rounded-lg flex items-center justify-center">
         <span className="font-display font-bold text-white text-lg">A4L</span>
       </div>
     )
