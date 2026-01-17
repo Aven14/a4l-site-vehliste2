@@ -106,7 +106,7 @@ function VerifyContent() {
       <div className="w-full max-w-md">
         <div className="card p-8">
           <div className="text-center mb-8">
-            <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-700 rounded-xl flex items-center justify-center mx-auto mb-4">
+            <div className="w-16 h-16 bg-gradient-to-br from-primary-500 to-primary-700 rounded-xl flex items-center justify-center mx-auto mb-4">
               <span className="font-display font-bold text-white text-2xl">A4L</span>
             </div>
             <h1 className="font-display text-2xl font-bold text-white">Vérification du compte</h1>
