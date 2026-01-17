@@ -9,7 +9,13 @@ export function Navbar() {
   const user = session?.user as any
 
   return (
-    <nav className="bg-dark-200/80 backdrop-blur-md border-b border-primary-500/20 sticky top-0 z-50">
+    <nav 
+      className="bg-dark-200/80 backdrop-blur-md sticky top-0 z-50"
+      style={{
+        borderColor: `rgba(var(--accent-color-rgb, 168, 85, 247), 0.1)`,
+        borderBottomWidth: '1px'
+      }}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
