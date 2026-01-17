@@ -9,18 +9,18 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Thème sombre militaire/RP pour Arma - Violet par défaut
+        // Utiliser les variables CSS pour que le thème change dynamiquement
         primary: {
-          50: '#faf5ff',
-          100: '#f3e8ff',
-          200: '#e9d5ff',
-          300: '#d8b4fe',
-          400: '#c084fc',
-          500: '#a855f7',
-          600: '#9333ea',
-          700: '#7e22ce',
-          800: '#6b21a8',
-          900: '#581c87',
+          50: 'hsl(from var(--accent-color) h s 95%)',
+          100: 'hsl(from var(--accent-color) h s 90%)',
+          200: 'hsl(from var(--accent-color) h s 80%)',
+          300: 'hsl(from var(--accent-color) h s 70%)',
+          400: 'var(--accent-color-400)',
+          500: 'var(--accent-color-500)',
+          600: 'var(--accent-color-600)',
+          700: 'var(--accent-color-700)',
+          800: 'hsl(from var(--accent-color) h s 30%)',
+          900: 'hsl(from var(--accent-color) h s 20%)',
         },
         dark: {
           100: '#1e1e1e',
