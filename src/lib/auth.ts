@@ -69,6 +69,24 @@ export const authOptions: NextAuthOptions = {
         token.canImport = user.canImport
         token.canManageUsers = user.canManageUsers
         token.canManageRoles = user.canManageRoles
+      } else if (token.sub) {
+        // Rafraîchir les données depuis la base de données quand l'utilisateur n'est pas défini
+        const dbUser = await prisma.user.findUnique({
+          where: { id: token.sub },
+          include: { role: true },
+        })
+        if (dbUser) {
+          token.themeColor = dbUser.themeColor || undefined
+          token.roleName = dbUser.role?.name || 'user'
+          token.canAccessAdmin = dbUser.role?.canAccessAdmin || false
+          token.canEditBrands = dbUser.role?.canEditBrands || false
+          token.canEditVehicles = dbUser.role?.canEditVehicles || false
+          token.canDeleteBrands = dbUser.role?.canDeleteBrands || false
+          token.canDeleteVehicles = dbUser.role?.canDeleteVehicles || false
+          token.canImport = dbUser.role?.canImport || false
+          token.canManageUsers = dbUser.role?.canManageUsers || false
+          token.canManageRoles = dbUser.role?.canManageRoles || false
+        }
       }
       return token
     },
