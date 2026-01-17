@@ -66,7 +66,7 @@ export default function ImportPage() {
     <div className="min-h-screen py-12 px-4">
       <div className="max-w-4xl mx-auto">
         <h1 className="font-display text-3xl font-bold text-white mb-2">
-          Import <span className="text-green-400">JSON</span>
+          Import <span className="text-primary-400">JSON</span>
         </h1>
         <p className="text-gray-400 mb-8">Importez des véhicules en masse depuis un fichier JSON</p>
 

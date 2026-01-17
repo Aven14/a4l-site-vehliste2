@@ -95,7 +95,7 @@ export default function AdminSettingsPage() {
     <div className="min-h-screen py-12 px-4">
       <div className="max-w-4xl mx-auto">
         <h1 className="font-display text-3xl font-bold text-white mb-2">
-          Paramètres du <span className="text-green-400">Site</span>
+          Paramètres du <span className="text-primary-400">Site</span>
         </h1>
         <p className="text-gray-500 mb-8">Gérer le logo et l'icône (favicon) du site</p>
 

@@ -44,7 +44,7 @@ export default function VehiclesPage() {
     <div className="min-h-screen py-12 px-4">
       <div className="max-w-7xl mx-auto">
         <h1 className="font-display text-4xl font-bold text-white mb-2">
-          Tous les <span className="text-green-400">Véhicules</span>
+          Tous les <span className="text-primary-400">Véhicules</span>
         </h1>
         <p className="text-gray-500 mb-6">Liste non-officielle des véhicules disponibles</p>
 

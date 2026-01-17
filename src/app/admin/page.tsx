@@ -26,10 +26,10 @@ export default async function AdminPage() {
     <div className="min-h-screen py-12 px-4">
       <div className="max-w-7xl mx-auto">
         <h1 className="font-display text-4xl font-bold text-white mb-2">
-          PANEL <span className="text-green-400">ADMIN</span>
+          PANEL <span className="text-primary-400">ADMIN</span>
         </h1>
         <p className="text-gray-400 mb-2">Bienvenue, {session.user?.name || session.user?.email}</p>
-        <p className="text-sm text-green-400 mb-12">Rôle : {user.roleName || 'user'}</p>
+        <p className="text-sm text-primary-400 mb-12">Rôle : {user.roleName || 'user'}</p>
 
         {/* Stats */}
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
