@@ -120,9 +120,11 @@ export async function PUT(req: NextRequest) {
       where: { id: currentUser.id },
       data: updateData,
     })
+    return NextResponse.json({ success: true, message: 'Profil mis à jour avec succès' })
   }
 
-  return NextResponse.json({ success: true })
+  // Aucun changement détecté
+  return NextResponse.json({ success: true, message: 'Aucun changement détecté' })
 }
 
 export async function DELETE() {

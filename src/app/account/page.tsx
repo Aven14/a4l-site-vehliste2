@@ -92,31 +92,37 @@ function AccountContent() {
       }
     }
 
-    const res = await fetch('/api/account', {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        username: form.username,
-        email: form.email,
-        themeColor: form.themeColor,
-      }),
-    })
+    try {
+      const res = await fetch('/api/account', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          username: form.username,
+          email: form.email,
+          themeColor: form.themeColor,
+        }),
+      })
 
-    const data = await res.json()
-    setLoading(false)
-
-    if (res.ok) {
-      if (data.emailPending) {
-        // Changement d'e-mail en attente de confirmation
-        setMessage(data.message || 'Un e-mail de confirmation a été envoyé. Veuillez cliquer sur le lien pour confirmer le changement d\'e-mail.')
-        // Ne pas mettre à jour le formulaire car l'e-mail n'a pas encore changé
+      const data = await res.json()
+      
+      if (res.ok) {
+        if (data.emailPending) {
+          // Changement d'e-mail en attente de confirmation
+          setMessage(data.message || 'Un e-mail de confirmation a été envoyé. Veuillez cliquer sur le lien pour confirmer le changement d\'e-mail.')
+          // Ne pas mettre à jour le formulaire car l'e-mail n'a pas encore changé
+        } else {
+          // Username ou couleur changé
+          setMessage(data.message || 'Profil mis à jour avec succès !')
+          await update()
+        }
       } else {
-        // Seul le username a changé
-        setMessage('Profil mis à jour ! Reconnectez-vous pour voir les changements.')
-        await update()
+        setError(data.error || 'Erreur lors de la mise à jour')
       }
-    } else {
-      setError(data.error || 'Erreur lors de la mise à jour')
+    } catch (err) {
+      console.error('Erreur mise à jour profil:', err)
+      setError('Une erreur est survenue lors de la mise à jour')
+    } finally {
+      setLoading(false)
     }
   }
 
