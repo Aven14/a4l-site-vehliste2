@@ -1,0 +1,33 @@
+import { NextRequest, NextResponse } from 'next/server'
+import { prisma } from '@/lib/prisma'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/lib/auth'
+
+// GET - Liste toutes les marques
+export async function GET() {
+  const brands = await prisma.brand.findMany({
+    include: { _count: { select: { vehicles: true } } },
+    orderBy: { name: 'asc' },
+  })
+  return NextResponse.json(brands)
+}
+
+// POST - Créer une marque (admin)
+export async function POST(req: NextRequest) {
+  const session = await getServerSession(authOptions)
+  if (!session) {
+    return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
+  }
+
+  const { name, logo } = await req.json()
+  
+  if (!name) {
+    return NextResponse.json({ error: 'Nom requis' }, { status: 400 })
+  }
+
+  const brand = await prisma.brand.create({
+    data: { name, logo },
+  })
+
+  return NextResponse.json(brand, { status: 201 })
+}
