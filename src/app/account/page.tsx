@@ -113,11 +113,32 @@ function AccountContent() {
         } else {
           // Username ou couleur changé
           setMessage(data.message || 'Profil mis à jour avec succès !')
+          
+          // Mettre à jour la couleur du thème immédiatement dans le DOM
+          if (data.themeColor) {
+            const hex = data.themeColor.replace('#', '')
+            const r = parseInt(hex.substring(0, 2), 16)
+            const g = parseInt(hex.substring(2, 4), 16)
+            const b = parseInt(hex.substring(4, 6), 16)
+
+            const lighten = (color: number, percent: number) => 
+              Math.min(255, Math.round(color + (255 - color) * percent))
+            const darken = (color: number, percent: number) => 
+              Math.max(0, Math.round(color * (1 - percent)))
+
+            document.documentElement.style.setProperty('--accent-color', data.themeColor)
+            document.documentElement.style.setProperty('--accent-color-400', `rgb(${lighten(r, 0.3)}, ${lighten(g, 0.3)}, ${lighten(b, 0.3)})`)
+            document.documentElement.style.setProperty('--accent-color-500', data.themeColor)
+            document.documentElement.style.setProperty('--accent-color-600', `rgb(${darken(r, 0.1)}, ${darken(g, 0.1)}, ${darken(b, 0.1)})`)
+            document.documentElement.style.setProperty('--accent-color-700', `rgb(${darken(r, 0.2)}, ${darken(g, 0.2)}, ${darken(b, 0.2)})`)
+            document.documentElement.style.setProperty('--accent-color-rgb', `${r}, ${g}, ${b}`)
+          }
+          
           await update()
-          // Recharger la page complètement pour appliquer le thème
+          // Recharger la page après un court délai
           setTimeout(() => {
             window.location.reload()
-          }, 500)
+          }, 1000)
         }
       } else {
         setError(data.error || 'Erreur lors de la mise à jour')

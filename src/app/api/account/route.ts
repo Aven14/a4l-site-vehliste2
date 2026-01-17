@@ -116,11 +116,15 @@ export async function PUT(req: NextRequest) {
   }
   
   if (Object.keys(updateData).length > 0) {
-    await prisma.user.update({
+    const updatedUser = await prisma.user.update({
       where: { id: currentUser.id },
       data: updateData,
     })
-    return NextResponse.json({ success: true, message: 'Profil mis à jour avec succès' })
+    return NextResponse.json({ 
+      success: true, 
+      message: 'Profil mis à jour avec succès',
+      themeColor: updatedUser.themeColor, // Retourner la couleur pour le client
+    })
   }
 
   // Aucun changement détecté
