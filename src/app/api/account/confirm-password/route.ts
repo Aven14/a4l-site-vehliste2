@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { sendPasswordChangeConfirmation } from '@/lib/email'
+import { getBaseUrl, getBaseUrlFromRequest } from '@/lib/utils'
 
 // Force cette route à être dynamique
 export const dynamic = 'force-dynamic'
@@ -9,14 +10,9 @@ export async function GET(req: NextRequest) {
   const searchParams = req.nextUrl.searchParams
   const token = searchParams.get('token')
   
-  // Construire l'URL de base sans port (en utilisant NEXTAUTH_URL ou l'origine de la requête nettoyée)
-  const baseUrl = process.env.NEXTAUTH_URL || (() => {
-    const host = req.headers.get('host') || ''
-    const protocol = host.includes('localhost') || host.includes('127.0.0.1') ? 'http' : 'https'
-    // Retirer le port s'il est présent (ex: host:80)
-    const cleanHost = host.split(':')[0]
-    return `${protocol}://${cleanHost}`
-  })()
+  // Construire l'URL de base en utilisant la fonction utilitaire qui force Vercel
+  const host = req.headers.get('host')
+  const baseUrl = getBaseUrlFromRequest(host) || getBaseUrl()
 
   if (!token) {
     return NextResponse.redirect(new URL('/account?error=token-manquant', baseUrl))
