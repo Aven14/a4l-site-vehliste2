@@ -1,5 +1,28 @@
 import nodemailer from 'nodemailer'
 
+// Fonction pour obtenir l'URL de base du site
+const getBaseUrl = (): string => {
+  const nextAuthUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000'
+  
+  // Si l'URL contient netlify.app, la remplacer par vercel.app
+  if (nextAuthUrl.includes('netlify.app')) {
+    return 'https://a4l-listeveh.vercel.app'
+  }
+  
+  // Si l'URL contient déjà vercel.app, l'utiliser telle quelle
+  if (nextAuthUrl.includes('vercel.app')) {
+    return nextAuthUrl
+  }
+  
+  // Pour le développement local
+  if (nextAuthUrl.includes('localhost')) {
+    return nextAuthUrl
+  }
+  
+  // Par défaut, utiliser le domaine Vercel
+  return 'https://a4l-listeveh.vercel.app'
+}
+
 // Configuration du transporteur d'e-mail
 const createTransporter = () => {
   // Configuration depuis les variables d'environnement
@@ -499,7 +522,7 @@ export async function sendPasswordChangeRequest(
   username?: string
 ): Promise<void> {
   const transporter = createTransporter()
-  const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000'
+  const baseUrl = getBaseUrl()
   const confirmationUrl = `${baseUrl}/account/confirm-password?token=${token}`
 
   const mailOptions = {
@@ -651,7 +674,7 @@ export async function sendEmailChangeRequest(
   username?: string
 ): Promise<void> {
   const transporter = createTransporter()
-  const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000'
+  const baseUrl = getBaseUrl()
   const confirmationUrl = `${baseUrl}/account/confirm-email?token=${token}`
 
   // E-mail à l'ancienne adresse
