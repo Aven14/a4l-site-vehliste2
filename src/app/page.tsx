@@ -27,7 +27,12 @@ export default async function HomePage() {
     <div className="min-h-screen">
       {/* Hero Section */}
       <section className="relative py-24 px-4 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-primary-500/5 to-transparent" />
+        <div 
+          className="absolute inset-0"
+          style={{
+            background: 'linear-gradient(to bottom, rgba(var(--accent-color-rgb, 168, 85, 247), 0.05), transparent)'
+          }}
+        />
         <div className="max-w-7xl mx-auto text-center relative z-10">
           <h1 className="font-display text-5xl md:text-7xl font-bold text-white mb-6 tracking-wider">
             VÉHICULES <span className="text-primary-400">A4L</span>
@@ -48,7 +53,14 @@ export default async function HomePage() {
       </section>
 
       {/* Stats */}
-      <section className="py-12 border-y border-primary-500/10">
+      <section 
+        className="py-12"
+        style={{
+          borderColor: `rgba(var(--accent-color-rgb, 168, 85, 247), 0.1)`,
+          borderTopWidth: '1px',
+          borderBottomWidth: '1px'
+        }}
+      >
         <div className="max-w-7xl mx-auto px-4">
           <div className="grid grid-cols-3 gap-8 text-center">
             <div>
