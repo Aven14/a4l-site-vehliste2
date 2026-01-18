@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 
 interface Role {
   canManageDealerships: boolean
+  canManageSite: boolean
   id: string
   name: string
   canAccessAdmin: boolean
@@ -16,6 +17,7 @@ interface Role {
   canImport: boolean
   canManageUsers: boolean
   canManageRoles: boolean
+
   isSystem: boolean
   _count: { users: number }
 }
