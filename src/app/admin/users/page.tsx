@@ -27,7 +27,7 @@ export default function AdminUsersPage() {
   const currentUser = session?.user as any
 
   useEffect(() => {
-    if (status === 'unauthenticated') router.push('/auth/login')
+    if (status === 'unauthenticated') router.push('/')
     else if (status === 'authenticated' && !currentUser?.canManageUsers) {
       router.push('/admin')
     }

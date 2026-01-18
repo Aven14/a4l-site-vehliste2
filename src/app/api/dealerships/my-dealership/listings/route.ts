@@ -98,24 +98,26 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    const user = await prisma.user.findUnique({
-      where: { email: session.user.email },
-      include: { dealership: true },
-    })
+    // Get dealership ID
+    const dealershipResult = await query(
+      `SELECT d.id FROM "Dealership" d
+       LEFT JOIN "User" u ON d."userId" = u.id
+       WHERE u.email = $1`,
+      [session.user.email]
+    )
 
-    if (!user?.dealership) {
-      return NextResponse.json(
-        { error: 'Vous n\'avez pas de concessionnaire' },
-        { status: 403 }
-      )
+    if (dealershipResult.rows.length === 0) {
     }
 
-    // Vérifier que le véhicule existe
-    const vehicle = await prisma.vehicle.findUnique({
-      where: { id: vehicleId },
-    })
+    const dealershipId = dealershipResult.rows[0].id
 
-    if (!vehicle) {
+    // Vérifier que le véhicule existe
+    const vehicleResult = await query(
+      `SELECT id FROM "Vehicle" WHERE id = $1`,
+      [vehicleId]
+    )
+
+    if (vehicleResult.rows.length === 0) {
       return NextResponse.json(
         { error: 'Véhicule non trouvé' },
         { status: 404 }
@@ -123,16 +125,12 @@ export async function POST(req: NextRequest) {
     }
 
     // Vérifier qu'il n'existe pas déjà une annonce pour ce véhicule
-    const existing = await prisma.dealershipListing.findUnique({
-      where: {
-        dealershipId_vehicleId: {
-          dealershipId: user.dealership.id,
-          vehicleId,
-        },
-      },
-    })
+    const existingResult = await query(
+      `SELECT id FROM "DealershipListing" WHERE "dealershipId" = $1 AND "vehicleId" = $2`,
+      [dealershipId, vehicleId]
+    )
 
-    if (existing) {
+    if (existingResult.rows.length > 0) {
       return NextResponse.json(
         { error: 'Vous avez déjà une annonce pour ce véhicule' },
         { status: 400 }
@@ -141,7 +139,7 @@ export async function POST(req: NextRequest) {
 
     const listing = await prisma.dealershipListing.create({
       data: {
-        dealershipId: user.dealership.id,
+        dealershipId,
         vehicleId,
         price,
         mileage,

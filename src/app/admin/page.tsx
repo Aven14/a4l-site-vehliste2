@@ -18,7 +18,7 @@ async function getStats() {
 
 export default async function AdminPage() {
   const session = await getServerSession(authOptions)
-  if (!session) redirect('/auth/login')
+  if (!session) redirect('/')
   
   const user = session.user as any
   if (!user.canAccessAdmin) redirect('/')

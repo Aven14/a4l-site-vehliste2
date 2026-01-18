@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
+import { query } from '@/lib/db'
 import { prisma } from '@/lib/prisma'
 
 export const dynamic = 'force-dynamic'
@@ -19,24 +20,30 @@ export async function PUT(
     const { price, mileage, condition, description, images, isAvailable } =
       await req.json()
 
-    const user = await prisma.user.findUnique({
-      where: { email: session.user.email },
-      include: { dealership: true },
-    })
+    // Get user dealership
+    const dealershipResult = await query(
+      `SELECT d.id FROM "Dealership" d
+       LEFT JOIN "User" u ON d."userId" = u.id
+       WHERE u.email = $1`,
+      [session.user.email]
+    )
 
-    if (!user?.dealership) {
+    if (dealershipResult.rows.length === 0) {
       return NextResponse.json(
         { error: 'Vous n\'avez pas de concessionnaire' },
         { status: 403 }
       )
     }
 
-    // Vérifier que l'annonce appartient au concessionnaire
-    const listing = await prisma.dealershipListing.findUnique({
-      where: { id: params.id },
-    })
+    const dealershipId = dealershipResult.rows[0].id
 
-    if (!listing || listing.dealershipId !== user.dealership.id) {
+    // Check listing ownership
+    const listingResult = await query(
+      `SELECT "dealershipId" FROM "DealershipListing" WHERE id = $1`,
+      [params.id]
+    )
+
+    if (listingResult.rows.length === 0 || listingResult.rows[0].dealershipId !== dealershipId) {
       return NextResponse.json(
         { error: 'Annonce non trouvée ou accès refusé' },
         { status: 403 }
@@ -81,24 +88,30 @@ export async function DELETE(
   }
 
   try {
-    const user = await prisma.user.findUnique({
-      where: { email: session.user.email },
-      include: { dealership: true },
-    })
+    // Get user dealership
+    const dealershipResult = await query(
+      `SELECT d.id FROM "Dealership" d
+       LEFT JOIN "User" u ON d."userId" = u.id
+       WHERE u.email = $1`,
+      [session.user.email]
+    )
 
-    if (!user?.dealership) {
+    if (dealershipResult.rows.length === 0) {
       return NextResponse.json(
         { error: 'Vous n\'avez pas de concessionnaire' },
         { status: 403 }
       )
     }
 
-    // Vérifier que l'annonce appartient au concessionnaire
-    const listing = await prisma.dealershipListing.findUnique({
-      where: { id: params.id },
-    })
+    const dealershipId = dealershipResult.rows[0].id
 
-    if (!listing || listing.dealershipId !== user.dealership.id) {
+    // Check listing ownership
+    const listingResult = await query(
+      `SELECT "dealershipId" FROM "DealershipListing" WHERE id = $1`,
+      [params.id]
+    )
+
+    if (listingResult.rows.length === 0 || listingResult.rows[0].dealershipId !== dealershipId) {
       return NextResponse.json(
         { error: 'Annonce non trouvée ou accès refusé' },
         { status: 403 }

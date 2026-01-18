@@ -15,7 +15,7 @@ export async function GET() {
 
   try {
     const result = await query(
-      `SELECT r.id, r.name, r.description, COUNT(u.id) as users_count
+      `SELECT r.id, r.name, COUNT(u.id) as users_count
        FROM "Role" r
        LEFT JOIN "User" u ON r.id = u."roleId"
        GROUP BY r.id
@@ -26,7 +26,6 @@ export async function GET() {
     const roles = result.rows.map((row: any) => ({
       id: row.id,
       name: row.name,
-      description: row.description,
       _count: {
         users: parseInt(row.users_count, 10)
       }
