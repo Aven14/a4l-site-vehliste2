@@ -38,7 +38,7 @@ export default function AdminDealerships() {
   })
 
   useEffect(() => {
-    if (status === 'unauthenticated') router.push('/auth/login')
+    if (status === 'unauthenticated') router.push('/')
     if (!session?.user?.canAccessAdmin) router.push('/')
   }, [status, session, router])
 
