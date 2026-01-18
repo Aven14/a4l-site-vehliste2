@@ -312,7 +312,7 @@ export default function AdminRolesPage() {
                 {role.canManageDealerships && <span className="text-xs bg-yellow-500/20 text-yellow-400 px-2 py-1 rounded">Gérer Les Concessionnaires</span>}
                 {role.canManageSite && <span className="text-xs bg-yellow-500/20 text-yellow-400 px-2 py-1 rounded">Gérer Le Site</span>}
               </div>
-              </div>
+            </div>
           ))}
         </div>
       </div>
