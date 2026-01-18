@@ -99,7 +99,7 @@ export async function POST(req: NextRequest) {
       },
       include: {
         user: {
-          select: { id: true, email: true, name: true },
+          select: { id: true, email: true, username: true },
         },
         _count: {
           select: { listings: true },
