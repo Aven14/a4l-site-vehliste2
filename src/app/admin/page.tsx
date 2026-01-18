@@ -94,7 +94,7 @@ export default async function AdminPage() {
             </Link>
           )}
           
-          {user.canManageDealerships && (
+          {user.canAccessAdmin && (
             <Link href="/admin/dealerships" className="card card-hover p-8 text-center border-green-500/30">
               <div className="text-4xl mb-4">🏪</div>
               <h2 className="font-display text-xl font-bold text-green-400 mb-2">Gestion des concessionnaires</h2>
