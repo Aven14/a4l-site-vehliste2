@@ -15,7 +15,7 @@ export async function GET() {
   try {
     const result = await query(
       `SELECT u.id, u.email, u.username, u.image, u."isVerified", u."createdAt",
-              r.id as role_id, r.name as role_name, r.description as role_description
+              r.id as role_id, r.name as role_name
        FROM "User" u
        LEFT JOIN "Role" r ON u."roleId" = r.id
        ORDER BY u."createdAt" DESC`,
@@ -31,8 +31,7 @@ export async function GET() {
       createdAt: row.createdAt,
       role: row.role_id ? {
         id: row.role_id,
-        name: row.role_name,
-        description: row.role_description
+        name: row.role_name
       } : null
     }))
 
