@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { query } from '@/lib/db'
 import { prisma } from '@/lib/prisma'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
@@ -12,17 +13,43 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url)
     const brandId = searchParams.get('brandId')
 
-    const vehicles = await prisma.vehicle.findMany({
-      where: brandId ? { brandId } : undefined,
-      include: { brand: true },
-      orderBy: { name: 'asc' },
-    })
+    let sql = `SELECT v.*, b.name as brand_name, b.logo as brand_logo 
+               FROM "Vehicle" v 
+               LEFT JOIN "Brand" b ON v."brandId" = b.id`
+    const params = []
+    
+    if (brandId) {
+      sql += ` WHERE v."brandId" = $1`
+      params.push(brandId)
+    }
+    
+    sql += ` ORDER BY v.name ASC`
+    
+    const result = await query(sql, params)
+    
+    const vehicles = result.rows.map((row: any) => ({
+      id: row.id,
+      name: row.name,
+      description: row.description,
+      price: row.price,
+      power: row.power,
+      trunk: row.trunk,
+      vmax: row.vmax,
+      seats: row.seats,
+      images: row.images,
+      brandId: row.brandId,
+      category: row.category,
+      createdAt: row.createdAt,
+      updatedAt: row.updatedAt,
+      brand: {
+        id: row.brandId,
+        name: row.brand_name,
+        logo: row.brand_logo
+      }
+    }))
 
     const response = NextResponse.json(vehicles)
-    
-    // Cache pendant 5 minutes (300 secondes)
     response.headers.set('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=3600')
-    
     return response
   } catch (error) {
     console.error('Erreur GET /api/vehicles:', error)

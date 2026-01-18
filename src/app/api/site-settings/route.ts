@@ -1,23 +1,30 @@
 import { NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma'
+import { query } from '@/lib/db'
 
-// Force cette route à être dynamique
+// Force dynamic
 export const dynamic = 'force-dynamic'
 
 export async function GET() {
   try {
-    // Récupérer les paramètres (route publique)
-    const [logoSetting, faviconSetting] = await Promise.all([
-      prisma.siteSettings.findUnique({ where: { key: 'siteLogo' } }),
-      prisma.siteSettings.findUnique({ where: { key: 'siteFavicon' } }),
-    ])
+    const result = await query(
+      `SELECT "key", "value" FROM "SiteSettings" WHERE "key" IN ('siteLogo', 'siteFavicon')`
+    )
 
-    const response = NextResponse.json({
-      siteLogo: logoSetting?.value || '',
-      siteFavicon: faviconSetting?.value || '',
+    const settings: { [key: string]: string } = {
+      siteLogo: '',
+      siteFavicon: '',
+    }
+
+    result.rows.forEach((row: any) => {
+      settings[row.key] = row.value || ''
     })
 
-    // Cache les paramètres du site pendant 1 heure
+    const response = NextResponse.json({
+      siteLogo: settings.siteLogo,
+      siteFavicon: settings.siteFavicon,
+    })
+
+    // Cache pendant 1 heure
     response.headers.set('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=86400')
     
     return response
@@ -28,7 +35,7 @@ export async function GET() {
       siteFavicon: '',
     })
     
-    // En cas d'erreur, cache quand même 5 minutes
+    // Cache 5 minutes en cas d'erreur
     response.headers.set('Cache-Control', 'public, s-maxage=300')
     return response
   }

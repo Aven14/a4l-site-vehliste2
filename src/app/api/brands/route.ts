@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { query } from '@/lib/db'
 import { prisma } from '@/lib/prisma'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
@@ -9,16 +10,21 @@ export const dynamic = 'force-dynamic'
 // GET - Liste toutes les marques
 export async function GET() {
   try {
-    const brands = await prisma.brand.findMany({
-      include: { _count: { select: { vehicles: true } } },
-      orderBy: { name: 'asc' },
-    })
+    const result = await query(
+      `SELECT id, name, logo, (SELECT COUNT(*) FROM "Vehicle" WHERE "brandId" = "Brand".id) as vehicle_count 
+       FROM "Brand" 
+       ORDER BY name ASC`
+    )
+    
+    const brands = result.rows.map((row: any) => ({
+      id: row.id,
+      name: row.name,
+      logo: row.logo,
+      _count: { vehicles: parseInt(row.vehicle_count) }
+    }))
     
     const response = NextResponse.json(brands)
-    
-    // Cache pendant 5 minutes (300 secondes)
     response.headers.set('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=3600')
-    
     return response
   } catch (error) {
     console.error('Erreur GET /api/brands:', error)
