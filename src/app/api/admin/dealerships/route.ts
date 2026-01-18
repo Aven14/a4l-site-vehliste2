@@ -1,0 +1,96 @@
+import { getServerSession } from 'next-auth'
+import { NextRequest, NextResponse } from 'next/server'
+import { prisma } from '@/lib/prisma'
+import { authOptions } from '@/lib/auth'
+
+export async function GET(req: NextRequest) {
+  try {
+    const session = await getServerSession(authOptions)
+
+    if (!session?.user || session.user.role !== 'ADMIN') {
+      return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
+    }
+
+    const dealerships = await prisma.dealership.findMany({
+      include: {
+        user: {
+          select: { id: true, email: true, name: true },
+        },
+        _count: {
+          select: { listings: true },
+        },
+      },
+      orderBy: { createdAt: 'desc' },
+    })
+
+    return NextResponse.json(dealerships)
+  } catch (error) {
+    console.error('[ADMIN_DEALERSHIPS_GET]', error)
+    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
+  }
+}
+
+export async function POST(req: NextRequest) {
+  try {
+    const session = await getServerSession(authOptions)
+
+    if (!session?.user || session.user.role !== 'ADMIN') {
+      return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
+    }
+
+    const body = await req.json()
+    const { name, description, userId } = body
+
+    if (!name || !userId) {
+      return NextResponse.json(
+        { error: 'Nom et utilisateur requis' },
+        { status: 400 }
+      )
+    }
+
+    // Vérifier que l'utilisateur n'a pas déjà un concessionnaire
+    const existingDealership = await prisma.dealership.findUnique({
+      where: { userId },
+    })
+
+    if (existingDealership) {
+      return NextResponse.json(
+        { error: 'Cet utilisateur a déjà un concessionnaire' },
+        { status: 400 }
+      )
+    }
+
+    // Vérifier que le nom est unique
+    const nameTaken = await prisma.dealership.findUnique({
+      where: { name },
+    })
+
+    if (nameTaken) {
+      return NextResponse.json(
+        { error: 'Ce nom de concessionnaire est déjà utilisé' },
+        { status: 400 }
+      )
+    }
+
+    const dealership = await prisma.dealership.create({
+      data: {
+        name,
+        description: description || null,
+        userId,
+      },
+      include: {
+        user: {
+          select: { id: true, email: true, name: true },
+        },
+        _count: {
+          select: { listings: true },
+        },
+      },
+    })
+
+    return NextResponse.json(dealership)
+  } catch (error) {
+    console.error('[ADMIN_DEALERSHIPS_POST]', error)
+    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
+  }
+}

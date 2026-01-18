@@ -40,6 +40,11 @@ export function Navbar() {
 
             {session ? (
               <div className="flex items-center gap-3">
+                {user?.dealership && (
+                  <Link href="/dealership" className="text-green-400 hover:text-green-300 transition font-medium">
+                    Concess
+                  </Link>
+                )}
                 {user?.canAccessAdmin && (
                   <Link href="/admin" className="text-primary-400 hover:text-primary-300 transition font-medium">
                     Panel

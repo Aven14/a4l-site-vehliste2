@@ -1,0 +1,132 @@
+import { NextRequest, NextResponse } from 'next/server'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/lib/auth'
+import { prisma } from '@/lib/prisma'
+
+export const dynamic = 'force-dynamic'
+
+// GET les annonces du concessionnaire connecté
+export async function GET(req: NextRequest) {
+  const session = await getServerSession(authOptions)
+  if (!session?.user?.email) {
+    return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
+  }
+
+  try {
+    const user = await prisma.user.findUnique({
+      where: { email: session.user.email },
+      include: { dealership: true },
+    })
+
+    if (!user?.dealership) {
+      return NextResponse.json(
+        { error: 'Vous n\'avez pas de concessionnaire' },
+        { status: 403 }
+      )
+    }
+
+    const listings = await prisma.dealershipListing.findMany({
+      where: { dealershipId: user.dealership.id },
+      include: {
+        vehicle: {
+          include: { brand: true },
+        },
+      },
+      orderBy: { createdAt: 'desc' },
+    })
+
+    return NextResponse.json(listings)
+  } catch (error) {
+    console.error('Erreur récupération annonces:', error)
+    return NextResponse.json(
+      { error: 'Erreur lors de la récupération des annonces' },
+      { status: 500 }
+    )
+  }
+}
+
+// POST créer une annonce
+export async function POST(req: NextRequest) {
+  const session = await getServerSession(authOptions)
+  if (!session?.user?.email) {
+    return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
+  }
+
+  try {
+    const { vehicleId, price, mileage, condition, description, images } =
+      await req.json()
+
+    if (!vehicleId || price === undefined) {
+      return NextResponse.json(
+        { error: 'Données manquantes' },
+        { status: 400 }
+      )
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { email: session.user.email },
+      include: { dealership: true },
+    })
+
+    if (!user?.dealership) {
+      return NextResponse.json(
+        { error: 'Vous n\'avez pas de concessionnaire' },
+        { status: 403 }
+      )
+    }
+
+    // Vérifier que le véhicule existe
+    const vehicle = await prisma.vehicle.findUnique({
+      where: { id: vehicleId },
+    })
+
+    if (!vehicle) {
+      return NextResponse.json(
+        { error: 'Véhicule non trouvé' },
+        { status: 404 }
+      )
+    }
+
+    // Vérifier qu'il n'existe pas déjà une annonce pour ce véhicule
+    const existing = await prisma.dealershipListing.findUnique({
+      where: {
+        dealershipId_vehicleId: {
+          dealershipId: user.dealership.id,
+          vehicleId,
+        },
+      },
+    })
+
+    if (existing) {
+      return NextResponse.json(
+        { error: 'Vous avez déjà une annonce pour ce véhicule' },
+        { status: 400 }
+      )
+    }
+
+    const listing = await prisma.dealershipListing.create({
+      data: {
+        dealershipId: user.dealership.id,
+        vehicleId,
+        price,
+        mileage,
+        condition,
+        description,
+        images: images ? JSON.stringify(images) : null,
+      },
+      include: {
+        vehicle: {
+          include: { brand: true },
+        },
+      },
+    })
+
+    return NextResponse.json(listing, { status: 201 })
+  } catch (error) {
+    console.error('Erreur création annonce:', error)
+    return NextResponse.json(
+      { error: 'Erreur lors de la création de l\'annonce' },
+      { status: 500 }
+    )
+  }
+}

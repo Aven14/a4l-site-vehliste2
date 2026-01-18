@@ -81,3 +81,38 @@ CREATE TABLE "SiteSettings" (
 -- Créer les index
 CREATE INDEX "User_roleId_idx" ON "User"("roleId");
 CREATE INDEX "Vehicle_brandId_idx" ON "Vehicle"("brandId");
+
+-- Table des concessionnaires
+CREATE TABLE "Dealership" (
+    "id" TEXT NOT NULL PRIMARY KEY DEFAULT gen_random_uuid()::text,
+    "name" TEXT NOT NULL UNIQUE,
+    "description" TEXT,
+    "logo" TEXT,
+    "userId" TEXT NOT NULL UNIQUE,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT "Dealership_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE CASCADE
+);
+
+-- Table des annonces de concessionnaires
+CREATE TABLE "DealershipListing" (
+    "id" TEXT NOT NULL PRIMARY KEY DEFAULT gen_random_uuid()::text,
+    "dealershipId" TEXT NOT NULL,
+    "vehicleId" TEXT NOT NULL,
+    "price" INTEGER NOT NULL,
+    "images" TEXT,
+    "mileage" INTEGER,
+    "condition" TEXT,
+    "description" TEXT,
+    "isAvailable" BOOLEAN NOT NULL DEFAULT true,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT "DealershipListing_dealershipId_fkey" FOREIGN KEY ("dealershipId") REFERENCES "Dealership" ("id") ON DELETE CASCADE,
+    CONSTRAINT "DealershipListing_vehicleId_fkey" FOREIGN KEY ("vehicleId") REFERENCES "Vehicle" ("id") ON DELETE CASCADE,
+    CONSTRAINT "DealershipListing_dealershipId_vehicleId_key" UNIQUE("dealershipId", "vehicleId")
+);
+
+-- Créer les index
+CREATE INDEX "Dealership_userId_idx" ON "Dealership"("userId");
+CREATE INDEX "DealershipListing_dealershipId_idx" ON "DealershipListing"("dealershipId");
+CREATE INDEX "DealershipListing_vehicleId_idx" ON "DealershipListing"("vehicleId");

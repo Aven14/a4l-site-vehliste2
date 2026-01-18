@@ -45,6 +45,7 @@ export const authOptions: NextAuthOptions = {
           canImport: user.role?.canImport || false,
           canManageUsers: user.role?.canManageUsers || false,
           canManageRoles: user.role?.canManageRoles || false,
+          dealership: user.dealership ? true : false,
         }
       },
     }),
@@ -69,11 +70,12 @@ export const authOptions: NextAuthOptions = {
         token.canImport = user.canImport
         token.canManageUsers = user.canManageUsers
         token.canManageRoles = user.canManageRoles
+        token.dealership = user.dealership
       } else if (token.sub) {
         // Rafraîchir les données depuis la base de données quand l'utilisateur n'est pas défini
         const dbUser = await prisma.user.findUnique({
           where: { id: token.sub },
-          include: { role: true },
+          include: { role: true, dealership: true },
         })
         if (dbUser) {
           token.themeColor = dbUser.themeColor || undefined
@@ -86,6 +88,7 @@ export const authOptions: NextAuthOptions = {
           token.canImport = dbUser.role?.canImport || false
           token.canManageUsers = dbUser.role?.canManageUsers || false
           token.canManageRoles = dbUser.role?.canManageRoles || false
+          token.dealership = dbUser.dealership ? true : false
         }
       }
       return token
@@ -102,6 +105,7 @@ export const authOptions: NextAuthOptions = {
         session.user.canImport = token.canImport as boolean
         session.user.canManageUsers = token.canManageUsers as boolean
         session.user.canManageRoles = token.canManageRoles as boolean
+        session.user.dealership = token.dealership as boolean | undefined
       }
       return session
     },
@@ -120,6 +124,7 @@ declare module 'next-auth' {
     canImport?: boolean
     canManageUsers?: boolean
     canManageRoles?: boolean
+    dealership?: boolean
   }
   interface Session {
     user: User & {
@@ -133,6 +138,7 @@ declare module 'next-auth' {
       canImport?: boolean
       canManageUsers?: boolean
       canManageRoles?: boolean
+      dealership?: boolean
     }
   }
 }
