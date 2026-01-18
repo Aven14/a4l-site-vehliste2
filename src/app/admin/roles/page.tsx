@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 
 interface Role {
+  canManageDealerships: boolean
   id: string
   name: string
   canAccessAdmin: boolean
@@ -42,7 +43,7 @@ export default function AdminRolesPage() {
   const user = session?.user as any
 
   useEffect(() => {
-    if (status === 'unauthenticated') router.push('/auth/login')
+    if (status === 'unauthenticated') router.push('/')
     else if (status === 'authenticated' && !user?.canManageRoles) {
       router.push('/admin')
     }
@@ -295,6 +296,7 @@ export default function AdminRolesPage() {
                 {role.canImport && <span className="text-xs bg-purple-500/20 text-purple-400 px-2 py-1 rounded">Import</span>}
                 {role.canManageUsers && <span className="text-xs bg-yellow-500/20 text-yellow-400 px-2 py-1 rounded">Gérer Users</span>}
                 {role.canManageRoles && <span className="text-xs bg-yellow-500/20 text-yellow-400 px-2 py-1 rounded">Gérer Rôles</span>}
+                {role.canManageDealerships && <span className="text-xs bg-yellow-500/20 text-yellow-400 px-2 py-1 rounded">Gérer Les Concessionnaires</span>}
               </div>
             </div>
           ))}
