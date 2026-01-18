@@ -16,11 +16,7 @@ export async function GET() {
           },
         },
         _count: {
-          select: {
-            listings: {
-              where: { isAvailable: true },
-            },
-          },
+          select: { listings: true },
         },
       },
       orderBy: { name: 'asc' },

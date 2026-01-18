@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation'
 interface User {
   id: string
   email: string
-  name: string | null
+  username: string | null
 }
 
 interface Dealership {
@@ -205,7 +205,7 @@ export default function AdminDealerships() {
                   <option value="">Sélectionner un utilisateur</option>
                   {users.map(user => (
                     <option key={user.id} value={user.id}>
-                      {user.name || user.email}
+                      {user.username || user.email}
                     </option>
                   ))}
                 </select>
@@ -240,7 +240,7 @@ export default function AdminDealerships() {
                       <p className="text-gray-400 text-sm mb-3">{dealership.description}</p>
                       <div className="space-y-1 text-sm text-gray-500">
                         <p>
-                          <span className="text-gray-400">Propriétaire:</span> {dealership.user?.name || dealership.user?.email}
+                          <span className="text-gray-400">Propriétaire:</span> {dealership.user?.username || dealership.user?.email}
                         </p>
                         <p>
                           <span className="text-gray-400">Annonces:</span> {dealership._count?.listings || 0}

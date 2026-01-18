@@ -14,7 +14,7 @@ export async function GET(req: NextRequest) {
     const dealerships = await prisma.dealership.findMany({
       include: {
         user: {
-          select: { id: true, email: true, name: true },
+          select: { id: true, email: true, username: true },
         },
         _count: {
           select: { listings: true },
