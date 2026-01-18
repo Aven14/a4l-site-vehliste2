@@ -224,7 +224,7 @@ export default function AdminRolesPage() {
                     <label className="flex items-center gap-2 text-sm">
                     <input
                       type="checkbox"
-                      checked={form.canManageDealerships}
+                      checked={form.canManageSite}
                       onChange={(e) => setForm({ ...form, canManageSite: e.target.checked })}
                       disabled={editingRole?.isSystem}
                       className="w-4 h-4 rounded bg-dark-300 border-gray-600 text-yellow-500 focus:ring-yellow-500"
