@@ -1,6 +1,9 @@
 import Link from 'next/link'
 import { prisma } from '@/lib/prisma'
 
+// Force dynamic rendering to avoid connection pool issues during build
+export const dynamic = 'force-dynamic'
+
 async function getBrands() {
   return prisma.brand.findMany({
     include: { _count: { select: { vehicles: true } } },
