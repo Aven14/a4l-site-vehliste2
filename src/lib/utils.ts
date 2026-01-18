@@ -5,14 +5,9 @@
 export function getBaseUrl(): string {
   const nextAuthUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000'
   
-  // Si l'URL contient netlify.app, la remplacer par vercel.app
-  if (nextAuthUrl.includes('netlify.app')) {
+  // En production, toujours utiliser Vercel
+  if (process.env.NODE_ENV === 'production') {
     return 'https://a4l-site-vehliste.vercel.app'
-  }
-  
-  // Si l'URL contient déjà vercel.app, l'utiliser telle quelle
-  if (nextAuthUrl.includes('vercel.app')) {
-    return nextAuthUrl
   }
   
   // Pour le développement local
@@ -20,7 +15,7 @@ export function getBaseUrl(): string {
     return nextAuthUrl
   }
   
-  // Par défaut, utiliser le domaine Vercel correct
+  // Fallback
   return 'https://a4l-site-vehliste.vercel.app'
 }
 
