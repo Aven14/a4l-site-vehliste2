@@ -206,6 +206,16 @@ export default function AdminRolesPage() {
                     />
                     <span className="text-gray-300">Supprimer véhicules</span>
                   </label>
+                    <label className="flex items-center gap-2 text-sm">
+                    <input
+                      type="checkbox"
+                      checked={form.canManageDealerships}
+                      onChange={(e) => setForm({ ...form, canManageDealerships: e.target.checked })}
+                      disabled={editingRole?.isSystem}
+                      className="w-4 h-4 rounded bg-dark-300 border-gray-600 text-yellow-500 focus:ring-yellow-500"
+                    />
+                    <span className="text-gray-300">Gérer Les concessionnaires</span>
+                  </label>
                   <label className="flex items-center gap-2 text-sm">
                     <input
                       type="checkbox"
@@ -235,16 +245,6 @@ export default function AdminRolesPage() {
                       className="w-4 h-4 rounded bg-dark-300 border-gray-600 text-yellow-500 focus:ring-yellow-500"
                     />
                     <span className="text-yellow-300">Gérer rôles</span>
-                  </label>
-                  <label className="flex items-center gap-2 text-sm">
-                    <input
-                      type="checkbox"
-                      checked={form.canManageDealerships}
-                      onChange={(e) => setForm({ ...form, canManageRoles: e.target.checked })}
-                      disabled={editingRole?.isSystem}
-                      className="w-4 h-4 rounded bg-dark-300 border-gray-600 text-yellow-500 focus:ring-yellow-500"
-                    />
-                    <span className="text-yellow-300">Gérer Les concessionnaires</span>
                   </label>
                 </div>
               </div>
