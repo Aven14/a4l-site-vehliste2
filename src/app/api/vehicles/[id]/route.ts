@@ -1,20 +1,52 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { query } from '@/lib/db'
 import { prisma } from '@/lib/prisma'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 
+export const dynamic = 'force-dynamic'
+
 // GET - Détail d'un véhicule
 export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
-  const vehicle = await prisma.vehicle.findUnique({
-    where: { id: params.id },
-    include: { brand: true },
-  })
+  try {
+    const result = await query(
+      `SELECT v.id, v.name, v.description, v.price, v.power, v.trunk, v.vmax, v.seats, v.images,
+              b.id as brand_id, b.name as brand_name, b.logo as brand_logo
+       FROM "Vehicle" v
+       LEFT JOIN "Brand" b ON v."brandId" = b.id
+       WHERE v.id = $1`,
+      [params.id]
+    )
 
-  if (!vehicle) {
-    return NextResponse.json({ error: 'Véhicule non trouvé' }, { status: 404 })
+    if (result.rows.length === 0) {
+      return NextResponse.json({ error: 'Véhicule non trouvé' }, { status: 404 })
+    }
+
+    const row = result.rows[0]
+    const vehicle = {
+      id: row.id,
+      name: row.name,
+      description: row.description,
+      price: row.price,
+      power: row.power,
+      trunk: row.trunk,
+      vmax: row.vmax,
+      seats: row.seats,
+      images: row.images,
+      brand: {
+        id: row.brand_id,
+        name: row.brand_name,
+        logo: row.brand_logo
+      }
+    }
+
+    const response = NextResponse.json(vehicle)
+    response.headers.set('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=3600')
+    return response
+  } catch (error) {
+    console.error('Vehicle GET error:', error)
+    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
-
-  return NextResponse.json(vehicle)
 }
 
 // PUT - Modifier un véhicule (admin)

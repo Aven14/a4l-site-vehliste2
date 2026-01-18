@@ -1,7 +1,10 @@
 import { getServerSession } from 'next-auth'
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { query } from '@/lib/db'
 import { authOptions } from '@/lib/auth'
+
+export const dynamic = 'force-dynamic'
 
 export async function GET(req: NextRequest) {
   try {
@@ -11,17 +14,33 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
     }
 
-    const dealerships = await prisma.dealership.findMany({
-      include: {
-        user: {
-          select: { id: true, email: true, username: true },
-        },
-        _count: {
-          select: { listings: true },
-        },
+    const result = await query(
+      `SELECT d.id, d.name, d.description, d.logo, d."createdAt",
+              u.id as user_id, u.email, u.username,
+              COUNT(dl.id) as listings_count
+       FROM "Dealership" d
+       LEFT JOIN "User" u ON d."userId" = u.id
+       LEFT JOIN "DealershipListing" dl ON d.id = dl."dealershipId"
+       GROUP BY d.id, u.id
+       ORDER BY d."createdAt" DESC`,
+      []
+    )
+
+    const dealerships = result.rows.map((row: any) => ({
+      id: row.id,
+      name: row.name,
+      description: row.description,
+      logo: row.logo,
+      createdAt: row.createdAt,
+      user: {
+        id: row.user_id,
+        email: row.email,
+        username: row.username,
       },
-      orderBy: { createdAt: 'desc' },
-    })
+      _count: {
+        listings: parseInt(row.listings_count, 10)
+      }
+    }))
 
     return NextResponse.json(dealerships)
   } catch (error) {

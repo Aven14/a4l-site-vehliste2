@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
-import { prisma } from '@/lib/prisma'
+import { query } from '@/lib/db'
 
 export const dynamic = 'force-dynamic'
 
@@ -13,29 +13,36 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const user = await prisma.user.findUnique({
-      where: { email: session.user.email },
-      include: {
-        dealership: {
-          include: {
-            _count: {
-              select: {
-                listings: true,
-              },
-            },
-          },
-        },
-      },
-    })
+    const result = await query(
+      `SELECT d.id, d.name, d.description, d.logo,
+              COUNT(dl.id) as listings_count
+       FROM "Dealership" d
+       LEFT JOIN "User" u ON d."userId" = u.id
+       LEFT JOIN "DealershipListing" dl ON d.id = dl."dealershipId"
+       WHERE u.email = $1
+       GROUP BY d.id`,
+      [session.user.email]
+    )
 
-    if (!user?.dealership) {
+    if (result.rows.length === 0) {
       return NextResponse.json(
         { error: 'Vous n\'avez pas de concessionnaire' },
         { status: 404 }
       )
     }
 
-    return NextResponse.json(user.dealership)
+    const row = result.rows[0]
+    const dealership = {
+      id: row.id,
+      name: row.name,
+      description: row.description,
+      logo: row.logo,
+      _count: {
+        listings: parseInt(row.listings_count, 10)
+      }
+    }
+
+    return NextResponse.json(dealership)
   } catch (error) {
     console.error('Erreur récupération concessionnaire:', error)
     return NextResponse.json(

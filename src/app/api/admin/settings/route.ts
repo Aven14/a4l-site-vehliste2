@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
+import { query } from '@/lib/db'
 import { prisma } from '@/lib/prisma'
 
 // Force cette route à être dynamique
@@ -19,14 +20,19 @@ export async function GET() {
 
   try {
     // Récupérer les paramètres
-    const [logoSetting, faviconSetting] = await Promise.all([
-      prisma.siteSettings.findUnique({ where: { key: 'siteLogo' } }),
-      prisma.siteSettings.findUnique({ where: { key: 'siteFavicon' } }),
-    ])
+    const result = await query(
+      `SELECT key, value FROM "SiteSettings" WHERE key IN ($1, $2)`,
+      ['siteLogo', 'siteFavicon']
+    )
+
+    const settings: { [key: string]: string } = {}
+    result.rows.forEach((row: any) => {
+      settings[row.key] = row.value || ''
+    })
 
     return NextResponse.json({
-      siteLogo: logoSetting?.value || '',
-      siteFavicon: faviconSetting?.value || '',
+      siteLogo: settings['siteLogo'] || '',
+      siteFavicon: settings['siteFavicon'] || '',
     })
   } catch (error) {
     console.error('Erreur récupération paramètres:', error)

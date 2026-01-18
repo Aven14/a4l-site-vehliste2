@@ -1,7 +1,9 @@
 import { NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
-import { prisma } from '@/lib/prisma'
+import { query } from '@/lib/db'
+
+export const dynamic = 'force-dynamic'
 
 export async function GET() {
   const session = await getServerSession(authOptions)
@@ -10,10 +12,33 @@ export async function GET() {
     return NextResponse.json({ error: 'Non autorisé' }, { status: 403 })
   }
 
-  const users = await prisma.user.findMany({
-    include: { role: true },
-    orderBy: { createdAt: 'desc' },
-  })
+  try {
+    const result = await query(
+      `SELECT u.id, u.email, u.username, u.image, u."emailVerified", u."createdAt",
+              r.id as role_id, r.name as role_name, r.description as role_description
+       FROM "User" u
+       LEFT JOIN "Role" r ON u."roleId" = r.id
+       ORDER BY u."createdAt" DESC`,
+      []
+    )
 
-  return NextResponse.json(users)
+    const users = result.rows.map((row: any) => ({
+      id: row.id,
+      email: row.email,
+      username: row.username,
+      image: row.image,
+      emailVerified: row.emailVerified,
+      createdAt: row.createdAt,
+      role: row.role_id ? {
+        id: row.role_id,
+        name: row.role_name,
+        description: row.role_description
+      } : null
+    }))
+
+    return NextResponse.json(users)
+  } catch (error) {
+    console.error('Admin users error:', error)
+    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
+  }
 }
