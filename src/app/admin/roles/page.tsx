@@ -36,6 +36,7 @@ export default function AdminRolesPage() {
     canImport: false,
     canManageUsers: false,
     canManageRoles: false,
+    canManageDealerships: false,
   })
 
   const user = session?.user as any
