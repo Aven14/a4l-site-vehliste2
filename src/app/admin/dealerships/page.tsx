@@ -39,7 +39,7 @@ export default function AdminDealerships() {
 
   useEffect(() => {
     if (status === 'unauthenticated') router.push('/auth/login')
-    if (session?.user?.roleName !== 'ADMIN') router.push('/')
+    if (!session?.user?.canAccessAdmin) router.push('/')
   }, [status, session, router])
 
   useEffect(() => {

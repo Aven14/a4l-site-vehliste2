@@ -7,7 +7,7 @@ export async function GET(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
 
-    if (!session?.user || session.user.roleName !== 'ADMIN') {
+    if (!session?.user?.canAccessAdmin) {
       return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
     }
 
@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
 
-    if (!session?.user || session.user.roleName !== 'ADMIN') {
+    if (!session?.user?.canAccessAdmin) {
       return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
     }
 
