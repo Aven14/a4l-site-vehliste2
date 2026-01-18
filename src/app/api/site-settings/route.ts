@@ -12,15 +12,24 @@ export async function GET() {
       prisma.siteSettings.findUnique({ where: { key: 'siteFavicon' } }),
     ])
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       siteLogo: logoSetting?.value || '',
       siteFavicon: faviconSetting?.value || '',
     })
+
+    // Cache les paramètres du site pendant 1 heure
+    response.headers.set('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=86400')
+    
+    return response
   } catch (error) {
     console.error('Erreur récupération paramètres:', error)
-    return NextResponse.json({
+    const response = NextResponse.json({
       siteLogo: '',
       siteFavicon: '',
     })
+    
+    // En cas d'erreur, cache quand même 5 minutes
+    response.headers.set('Cache-Control', 'public, s-maxage=300')
+    return response
   }
 }
