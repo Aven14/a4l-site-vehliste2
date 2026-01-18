@@ -3,6 +3,9 @@ import { prisma } from '@/lib/prisma'
 import { notFound } from 'next/navigation'
 import { getDealershipLocation } from '@/lib/dealerships'
 
+// Force dynamic rendering for Vercel serverless
+export const dynamic = 'force-dynamic'
+
 async function getVehicle(id: string) {
   const vehicle = await prisma.vehicle.findUnique({
     where: { id },

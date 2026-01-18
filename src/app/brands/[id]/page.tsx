@@ -2,6 +2,9 @@ import Link from 'next/link'
 import { prisma } from '@/lib/prisma'
 import { notFound } from 'next/navigation'
 
+// Force dynamic rendering for Vercel serverless
+export const dynamic = 'force-dynamic'
+
 async function getBrand(id: string) {
   const brand = await prisma.brand.findUnique({
     where: { id },

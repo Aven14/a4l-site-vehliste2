@@ -4,6 +4,9 @@ import { redirect } from 'next/navigation'
 import { prisma } from '@/lib/prisma'
 import Link from 'next/link'
 
+// Force dynamic rendering for Vercel serverless
+export const dynamic = 'force-dynamic'
+
 async function getStats() {
   const [brands, vehicles, users] = await Promise.all([
     prisma.brand.count(),
