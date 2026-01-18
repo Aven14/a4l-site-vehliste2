@@ -38,6 +38,7 @@ export default function AdminRolesPage() {
     canManageUsers: false,
     canManageRoles: false,
     canManageDealerships: false,
+    canManageSite: false,
   })
 
   const user = session?.user as any
@@ -89,6 +90,7 @@ export default function AdminRolesPage() {
       canManageUsers: role.canManageUsers,
       canManageRoles: role.canManageRoles,
       canManageDealerships: role.canManageDealerships,
+      canManageSite: role.canManageSite,
     })
     setShowForm(true)
   }
@@ -111,6 +113,7 @@ export default function AdminRolesPage() {
       canManageUsers: false,
       canManageRoles: false,
       canManageDealerships: false,
+      canManageSite: false,
     })
   }
 
@@ -214,7 +217,17 @@ export default function AdminRolesPage() {
                       disabled={editingRole?.isSystem}
                       className="w-4 h-4 rounded bg-dark-300 border-gray-600 text-yellow-500 focus:ring-yellow-500"
                     />
-                    <span className="text-gray-300">Gérer Les concessionnaires</span>
+                    <span className="text-gray-300">Gérer les concessionnaires</span>
+                  </label>
+                    <label className="flex items-center gap-2 text-sm">
+                    <input
+                      type="checkbox"
+                      checked={form.canManageDealerships}
+                      onChange={(e) => setForm({ ...form, canManageSite: e.target.checked })}
+                      disabled={editingRole?.isSystem}
+                      className="w-4 h-4 rounded bg-dark-300 border-gray-600 text-yellow-500 focus:ring-yellow-500"
+                    />
+                    <span className="text-gray-300">Gérer le site</span>
                   </label>
                   <label className="flex items-center gap-2 text-sm">
                     <input
@@ -297,6 +310,8 @@ export default function AdminRolesPage() {
                 {role.canManageUsers && <span className="text-xs bg-yellow-500/20 text-yellow-400 px-2 py-1 rounded">Gérer Users</span>}
                 {role.canManageRoles && <span className="text-xs bg-yellow-500/20 text-yellow-400 px-2 py-1 rounded">Gérer Rôles</span>}
                 {role.canManageDealerships && <span className="text-xs bg-yellow-500/20 text-yellow-400 px-2 py-1 rounded">Gérer Les Concessionnaires</span>}
+                {role.canManageSite && <span className="text-xs bg-yellow-500/20 text-yellow-400 px-2 py-1 rounded">Gérer Le Site</span>}
+              </div>
               </div>
             </div>
           ))}
