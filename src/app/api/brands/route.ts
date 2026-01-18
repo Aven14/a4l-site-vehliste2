@@ -3,13 +3,27 @@ import { prisma } from '@/lib/prisma'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 
+// Force dynamic pour éviter les problèmes au build
+export const dynamic = 'force-dynamic'
+
 // GET - Liste toutes les marques
 export async function GET() {
-  const brands = await prisma.brand.findMany({
-    include: { _count: { select: { vehicles: true } } },
-    orderBy: { name: 'asc' },
-  })
-  return NextResponse.json(brands)
+  try {
+    const brands = await prisma.brand.findMany({
+      include: { _count: { select: { vehicles: true } } },
+      orderBy: { name: 'asc' },
+    })
+    
+    const response = NextResponse.json(brands)
+    
+    // Cache pendant 5 minutes (300 secondes)
+    response.headers.set('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=3600')
+    
+    return response
+  } catch (error) {
+    console.error('Erreur GET /api/brands:', error)
+    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
+  }
 }
 
 // POST - Créer une marque (admin)
